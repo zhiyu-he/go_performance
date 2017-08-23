@@ -1,18 +1,57 @@
 package build_in
 
+import "testing"
 
-var m = make(map[int64]int64, 120000)
+var size = 50000
 
-func init() {
-	for i := 0; i < 120000; i++ {
-		m[int64(i)]= int64(i)
+func assignMap() {
+	m := make(map[int]int)
+	for i := 0; i < size; i++ {
+		m[i] = i
 	}
 }
 
-
-func emptyMap() {
-	for k := range  m {
-		delete(m, k)
+func assignMapWithCap0() {
+	m := make(map[int]int, size*2)
+	for i := 0; i < size; i++ {
+		m[i] = i
 	}
 }
 
+func assignMapWithCap() {
+	m := make(map[int]int, size)
+	for i := 0; i < size; i++ {
+		m[i] = i
+	}
+}
+
+func assignMapWithCap2() {
+	m := make(map[int]int, size)
+	for i := 0; i < size*2; i++ {
+		m[i] = i
+	}
+}
+
+func BenchmarkAssignMap(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		assignMap()
+	}
+}
+
+func BenchmarkAssignMapWithCap0(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		assignMapWithCap0()
+	}
+}
+
+func BenchmarkAssignMapWithCap(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		assignMapWithCap()
+	}
+}
+
+func BenchmarkAssignMapWithCap2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		assignMapWithCap2()
+	}
+}
