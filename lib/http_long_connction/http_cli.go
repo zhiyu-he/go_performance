@@ -7,6 +7,7 @@ import (
 	"net"
 	"time"
 	"io/ioutil"
+	"io"
 )
 
 const URL = "http://127.0.0.1:4102"
@@ -23,6 +24,8 @@ func doPost(client *http.Client, url, topic string) (string, error) {
 	}
 
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
+	//io.Copy(ioutil.Discard,resp.Body)
+
 	if err != nil {
 		return "", err
 	}
@@ -33,8 +36,6 @@ func doPost(client *http.Client, url, topic string) (string, error) {
 	}
 	return string(bodyBytes), nil
 
-	err = resp.Body.Close()
-	return "", err
 }
 
 func doPost2(client *http.Client, url, topic string) (string, error) {
@@ -64,20 +65,21 @@ func main() {
 		},
 	}
 	// 循环中没有Connection的创建, 说明进行了复用, test-case1
-	/*
+
 	for {
 		go doPost(client, URL, "mq_ad1")
 		go doPost(client, URL, "mq_ad2")
 		time.Sleep(2 * time.Second)
 	}
-	*/
 
+
+	/*
 	// 由于server返回了msg, 所以这个消息cli不读的情况下, 就重新创建链接 test-case2
 	for {
 		go doPost2(client, URL, "mq_ad1")
 		go doPost2(client, URL, "mq_ad2")
 		time.Sleep(2 * time.Second)
 	}
-
+	*/
 
 }
