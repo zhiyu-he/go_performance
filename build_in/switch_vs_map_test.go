@@ -98,13 +98,13 @@ func IsExceptedValueSlice2(val string) bool {
 
 func BenchmarkSwitch(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		IsExceptedValueSwitch(1)
+		IsExceptedValueSwitch(16)
 	}
 }
 
 func BenchmarkMap(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		IsExceptedValueMap(1)
+		IsExceptedValueMap(16)
 	}
 }
 
