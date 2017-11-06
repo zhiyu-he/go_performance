@@ -1,9 +1,9 @@
 package main
 
 import (
-	"net/http"
-	"io"
 	"fmt"
+	"io"
+	"net/http"
 )
 
 func HandlePut(w http.ResponseWriter, req *http.Request) {

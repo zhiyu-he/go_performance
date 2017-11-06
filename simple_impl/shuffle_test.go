@@ -1,11 +1,11 @@
 package simple_impl
 
 import (
+	"fmt"
 	"math/rand"
+	"sort"
 	"testing"
 	"time"
-	"sort"
-	"fmt"
 )
 
 var idList []int
@@ -30,7 +30,7 @@ func TestShuffle(t *testing.T) {
 	const size = 30000
 	idList1 := make([]int, size)
 	idList2 := make([]int, size)
-	for i := 0; i < size; i ++ {
+	for i := 0; i < size; i++ {
 		num := rand.Int()
 		idList1[i] = num
 		idList2[i] = num
@@ -51,7 +51,6 @@ func TestShuffle(t *testing.T) {
 		}
 	}
 }
-
 
 func BenchmarkShuffle(b *testing.B) {
 	for i := 0; i < b.N; i++ {

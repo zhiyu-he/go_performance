@@ -10,6 +10,7 @@ const (
 	pool_size = 600
 	slice_cap = 8192
 )
+
 var pool = NewSimpleSlicePool(pool_size, slice_cap)
 
 /*
@@ -55,7 +56,7 @@ func doWithSlicePool() {
 
 	m := (*[]*TestObj)(unsafe.Pointer(obj))
 
-	for i := 0;  i < 8192; i++ {
+	for i := 0; i < 8192; i++ {
 		*m = append(*m, &TestObj{Index: i})
 	}
 
@@ -64,13 +65,10 @@ func doWithSlicePool() {
 
 func doWithSliceMake() {
 	m := make([]*TestObj, 0, 8192)
-	for i := 0;  i < 8192; i++ {
+	for i := 0; i < 8192; i++ {
 		m = append(m, &TestObj{Index: i})
 	}
 }
-
-
-
 
 func BenchmarkDoWithSlicePool(b *testing.B) {
 	for i := 0; i < b.N; i++ {

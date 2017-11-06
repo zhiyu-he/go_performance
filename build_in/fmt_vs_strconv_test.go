@@ -3,10 +3,9 @@ package build_in
 import (
 	"fmt"
 	"strconv"
-	"testing"
 	"strings"
+	"testing"
 )
-
 
 func fmtInt() string {
 	return fmt.Sprint(100)
@@ -28,7 +27,6 @@ func strconvAdd() string {
 	return "after_rank:" + strconv.FormatInt(100, 10)
 }
 
-
 func TestFmtJoin(t *testing.T) {
 	fmtJoin()
 }
@@ -37,13 +35,11 @@ func TestStrconvAdd(t *testing.T) {
 	strconvAdd()
 }
 
-
 func BenchmarkFmtJoin(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		fmtJoin()
 	}
 }
-
 
 func BenchmarkStrconvAdd(b *testing.B) {
 	for i := 0; i < b.N; i++ {
@@ -56,7 +52,6 @@ func BenchmarkStrconvJoin(b *testing.B) {
 		strconvJoin()
 	}
 }
-
 
 func BenchmarkFmtInt(b *testing.B) {
 	for i := 0; i < b.N; i++ {

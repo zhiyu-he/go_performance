@@ -1,8 +1,8 @@
 package build_in
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
 var (
@@ -13,9 +13,7 @@ var (
 	empty1 = []int64{}
 	empty2 = []int64{}
 	empty3 = []int64{}
-
 )
-
 
 func TestEmptyAlloc(t *testing.T) {
 	l := appendEmpty()
@@ -28,8 +26,8 @@ func appendEmpty() int {
 }
 
 func appendTwoArray() int {
-	m := append([]int64{1,2,3}, []int64{4, 5, 6}...)
-	q := append(m, append([]int64{1,2,3}, []int64{4, 5, 6}...)...)
+	m := append([]int64{1, 2, 3}, []int64{4, 5, 6}...)
+	q := append(m, append([]int64{1, 2, 3}, []int64{4, 5, 6}...)...)
 	return len(q)
 }
 

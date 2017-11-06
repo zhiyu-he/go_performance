@@ -34,7 +34,7 @@ func NewSimpleSlicePool(poolSize, sliceCap int) *SimpleSlicePool {
 		poolSize:   poolSize,
 		sliceCap:   sliceCap,
 		startIndex: 0,
-		endIndex:   poolSize-1,
+		endIndex:   poolSize - 1,
 		slices:     slices,
 		mu:         new(sync.Mutex),
 	}
@@ -46,7 +46,7 @@ func (p *SimpleSlicePool) _getIndex() int {
 
 	if p.startIndex != p.endIndex {
 		idx = p.startIndex
-		p.startIndex = (p.startIndex+1)%p.poolSize
+		p.startIndex = (p.startIndex + 1) % p.poolSize
 		p.mu.Unlock()
 	} else {
 		p.mu.Unlock()
@@ -75,4 +75,3 @@ func (p *SimpleSlicePool) PutSliceObject(slicePtr *[]interface{}, idx int) {
 	(*tmpPtr).len = 0
 	p._putIndex()
 }
-

@@ -24,7 +24,6 @@ func appendWithPreAllocArray() {
 	preAlloc = preAlloc[0:0]
 }
 
-
 func BenchmarkCopyWithNilArray(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		copyWithNilArray()
@@ -38,7 +37,6 @@ func BenchmarkCopyWithNilArray2(b *testing.B) {
 func BenchmarkCopyWithNilArray3(b *testing.B) {
 	BenchmarkCopyWithNilArray2(b)
 }
-
 
 func BenchmarkAppendWithPreAllocArray(b *testing.B) {
 	for i := 0; i < b.N; i++ {

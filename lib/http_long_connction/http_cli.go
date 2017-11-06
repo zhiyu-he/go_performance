@@ -2,17 +2,15 @@ package main
 
 import (
 	"net/http"
-//	"io/ioutil"
+	//	"io/ioutil"
 	"fmt"
+	"io"
+	"io/ioutil"
 	"net"
 	"time"
-	"io/ioutil"
-	"io"
 )
 
 const URL = "http://127.0.0.1:4102"
-
-
 
 func doPost(client *http.Client, url, topic string) (string, error) {
 	uri := url + "/put?topic=" + topic
@@ -51,13 +49,12 @@ func doPost2(client *http.Client, url, topic string) (string, error) {
 	return "", err
 }
 
-
 func main() {
 
 	client := &http.Client{
 		Transport: &http.Transport{
 			Dial: func(network, addr string) (net.Conn, error) {
-				conn, err  := net.DialTimeout(network, addr, 50 * time.Millisecond)
+				conn, err := net.DialTimeout(network, addr, 50*time.Millisecond)
 				fmt.Printf("LocalAddr: %v RemoteAddr: %v\n", conn.LocalAddr(), conn.RemoteAddr())
 				return conn, err
 			},
@@ -72,14 +69,13 @@ func main() {
 		time.Sleep(2 * time.Second)
 	}
 
-
 	/*
-	// 由于server返回了msg, 所以这个消息cli不读的情况下, 就重新创建链接 test-case2
-	for {
-		go doPost2(client, URL, "mq_ad1")
-		go doPost2(client, URL, "mq_ad2")
-		time.Sleep(2 * time.Second)
-	}
+		// 由于server返回了msg, 所以这个消息cli不读的情况下, 就重新创建链接 test-case2
+		for {
+			go doPost2(client, URL, "mq_ad1")
+			go doPost2(client, URL, "mq_ad2")
+			time.Sleep(2 * time.Second)
+		}
 	*/
 
 }
