@@ -3,30 +3,40 @@ package build_in
 import (
 	"encoding/binary"
 	"testing"
+	"github.com/stretchr/testify/assert"
 )
 
-func copy2dst(src *[]byte, dst *[]byte) {
-	copy(*dst, *src)
+func copy2dst(src *[]byte, dst []byte) {
+	copy(dst, *src)
 }
 
 var buffer [8]byte
 
-func f1(val int64, dst *[]byte) {
+func f1(val int64, offset int, dst *[]byte) {
 	v := buffer[0:8]
 	binary.BigEndian.PutUint64(v, uint64(val))
-	copy2dst(&v, dst)
+	copy2dst(&v, (*dst)[offset:])
 }
 
 func f2(val int64, offset int, dst *[]byte) {
 	binary.BigEndian.PutUint64((*dst)[offset:], uint64(val))
 }
 
-var dst1 []byte = make([]byte, 1024*1024*100)
-var dst2 []byte = make([]byte, 1024*1024*100)
+var dst1 = make([]byte, 40000*8)
+var dst2 = make([]byte, 40000*8)
+
+
+
+func TestEqual(t *testing.T) {
+	Loop1()
+	Loop2()
+	assert.Equal(t, dst1[:36000], dst2[:36000])
+}
 
 func Loop1() {
+	idx := 0
 	for i := 0; i < 36000; i++ {
-		f1(int64(i), &dst1)
+		f1(int64(i), idx+i*8, &dst1)
 	}
 }
 
