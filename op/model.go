@@ -2,6 +2,10 @@ package op
 
 import "unsafe"
 
+type M struct {
+	num int64
+}
+
 type BidModel struct {
 	field0  int64
 	field1  int64
@@ -35,8 +39,22 @@ type BidModel struct {
 	field30 int64
 	field31 int64
 	field32 int64
+	m1      *M
+	m2      *M
 }
 
 func (p *BidModel) GetValue(offset uintptr) int64 {
 	return *(*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + offset))
+}
+
+func (p *BidModel) SetValue(offset uintptr, value int64) {
+	*(*int64)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + offset)) = value
+}
+
+func (p *BidModel) SetStructValue(offset uintptr, val *M) {
+	*(*M)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + offset)) = *val
+}
+
+func (p *BidModel) GetStructValue(offset uintptr) *M {
+	return (*M)(unsafe.Pointer(uintptr(unsafe.Pointer(p)) + offset))
 }
