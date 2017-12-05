@@ -15,12 +15,13 @@ func copyWithNilArray() {
 	copy(array, fillData)
 }
 
-func copyWithPreAllocArray() {
-	copy(preAlloc2, fillData)
+
+func copyWithPreAllocArray(dat []uint64) {
+	copy(preAlloc2, dat)
 }
 
-func appendWithPreAllocArray() {
-	preAlloc = append(preAlloc, fillData...)
+func appendWithPreAllocArray(dat []uint64) {
+	preAlloc = append(preAlloc, dat...)
 	preAlloc = preAlloc[0:0]
 }
 
@@ -39,8 +40,9 @@ func BenchmarkCopyWithNilArray3(b *testing.B) {
 }
 
 func BenchmarkAppendWithPreAllocArray(b *testing.B) {
+	dat := []uint64{1}
 	for i := 0; i < b.N; i++ {
-		appendWithPreAllocArray()
+		appendWithPreAllocArray(dat)
 	}
 }
 
@@ -53,8 +55,9 @@ func BenchmarkAppendWithPreAllocArray3(b *testing.B) {
 }
 
 func BenchmarkCopyWithPreArray(b *testing.B) {
+	dat := []uint64{1}
 	for i := 0; i < b.N; i++ {
-		copyWithPreAllocArray()
+		copyWithPreAllocArray(dat)
 	}
 }
 
