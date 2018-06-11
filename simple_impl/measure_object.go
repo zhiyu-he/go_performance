@@ -23,6 +23,12 @@ func MeasureObject(obj interface{}) uint {
 }
 
 func measure(v reflect.Value, num *uint) {
+	defer func() {
+		if p := recover(); p != nil {
+
+			fmt.Printf("v: %v vt: %v\n", v, v.Type())
+		}
+	}()
 	t := v.Type()
 	switch t.Kind() {
 	case reflect.Chan:
@@ -30,6 +36,9 @@ func measure(v reflect.Value, num *uint) {
 	case reflect.Interface:
 	case reflect.Map:
 	case reflect.Ptr:
+		if reflect.Value.IsNil(v) {
+			return
+		}
 		// 对于ptr来说, 还是可以进一步求解的.
 		*num += uint(t.Size())
 		//fmt.Printf("kind: %v  size: %v sum-size: %d\n", t.Kind(), t.Size(), *num)
@@ -39,7 +48,7 @@ func measure(v reflect.Value, num *uint) {
 		//fmt.Printf("kind: %v  size: %v sum-size: %d\n", t.Kind(), t.Size(), *num)
 		for i := 0; i < v.Len(); i++ {
 			item := v.Index(i)
-			if int(item.Kind()) > 16 && reflect.Value.IsNil(item) {
+			if int(item.Kind()) > 16 && item.Kind() != reflect.String && reflect.Value.IsNil(item) {
 				continue
 			}
 			measure(item, num)
