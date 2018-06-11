@@ -1,17 +1,16 @@
 package simple_impl
 
 import (
-	"reflect"
 	"fmt"
+	"reflect"
 )
-
 
 func MeasureObject(obj interface{}) uint {
 	if reflect.ValueOf(obj).IsNil() {
 		return 0
 	}
 	value := reflect.ValueOf(obj)
-	ve := value.Elem()	// value对应的真实Element
+	ve := value.Elem() // value对应的真实Element
 
 	if ve.Kind() != reflect.Struct {
 		panic("no struct type")
@@ -29,7 +28,21 @@ func measure(v reflect.Value, num *uint) {
 	case reflect.Func:
 	case reflect.Interface:
 	case reflect.Map:
+		if reflect.Value.IsNil(v) {
+			return
+		}
+		*num += uint(t.Size())
+		keys := v.MapKeys()
+		for i := 0; i < len(keys); i++ {
+			measure(keys[i], num)
+			hashVal := v.MapIndex(keys[i])
+			measure(hashVal, num)
+		}
+
 	case reflect.Ptr:
+		if reflect.Value.IsNil(v) {
+			return
+		}
 		// 对于ptr来说, 还是可以进一步求解的.
 		*num += uint(t.Size())
 		//fmt.Printf("kind: %v  size: %v sum-size: %d\n", t.Kind(), t.Size(), *num)
@@ -39,7 +52,7 @@ func measure(v reflect.Value, num *uint) {
 		//fmt.Printf("kind: %v  size: %v sum-size: %d\n", t.Kind(), t.Size(), *num)
 		for i := 0; i < v.Len(); i++ {
 			item := v.Index(i)
-			if int(item.Kind()) > 16 && reflect.Value.IsNil(item) {
+			if int(item.Kind()) > 16 && item.Kind() != reflect.String && reflect.Value.IsNil(item) {
 				continue
 			}
 			measure(item, num)
