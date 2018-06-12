@@ -16,8 +16,11 @@ type A struct {
 	Sli1     []int64
 	Sli2     []*M
 	Arr3     [3]int
-	M1       map[int]int
-	M2       map[string]*M
+}
+
+type A2 struct {
+	M1 map[int]int
+	M2 map[string]*M
 }
 
 func TestMeasureObject(t *testing.T) {
@@ -28,6 +31,12 @@ func TestMeasureObject(t *testing.T) {
 	}
 	sli1 := []int64{1, 2, 3}
 	sli2 := make([]*M, 10)
-	a := &A{Id: 100, Name: "toutiao", Ptr: m, Sli1: sli1, Sli2: sli2, M1: map[int]int{}, M2: map[string]*M{"t1": nil, "t2": m}}
+	a := &A{Id: 100, Name: "toutiao", Ptr: m, Sli1: sli1, Sli2: sli2}
 	MeasureObject(a)
+
+	a2 := &A2{}
+	MeasureObject(a2)
+
+	a3 := &A2{M1: nil, M2: map[string]*M{"t1": m, "t2": m}}
+	MeasureObject(a3)
 }

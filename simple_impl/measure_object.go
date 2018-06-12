@@ -50,7 +50,7 @@ func measure(v reflect.Value, num *uint) {
 		*num += uint(t.Size())
 		for i := 0; i < v.Len(); i++ {
 			item := v.Index(i)
-			if int(item.Kind()) > 16 && item.Kind() != reflect.String && reflect.Value.IsNil(item) {
+			if CheckNil(item.Kind()) && reflect.Value.IsNil(item) {
 				continue
 			}
 			measure(item, num)
@@ -66,4 +66,9 @@ func measure(v reflect.Value, num *uint) {
 	default:
 		*num += uint(t.Size())
 	}
+}
+
+func CheckNil(kind reflect.Kind) bool {
+	return kind == reflect.Chan || kind == reflect.Func || kind == reflect.Map || kind == reflect.Ptr ||
+		kind == reflect.Interface || kind == reflect.Slice
 }
