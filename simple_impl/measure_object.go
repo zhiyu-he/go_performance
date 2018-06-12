@@ -28,10 +28,10 @@ func measure(v reflect.Value, num *uint) {
 	case reflect.Func:
 	case reflect.Interface:
 	case reflect.Map:
+		*num += uint(t.Size())
 		if reflect.Value.IsNil(v) {
 			return
 		}
-		*num += uint(t.Size())
 		keys := v.MapKeys()
 		for i := 0; i < len(keys); i++ {
 			measure(keys[i], num)
@@ -40,19 +40,17 @@ func measure(v reflect.Value, num *uint) {
 		}
 
 	case reflect.Ptr:
+		*num += uint(t.Size())
 		if reflect.Value.IsNil(v) {
 			return
 		}
 		// 对于ptr来说, 还是可以进一步求解的.
-		*num += uint(t.Size())
-		//fmt.Printf("kind: %v  size: %v sum-size: %d\n", t.Kind(), t.Size(), *num)
 		measure(v.Elem(), num)
 	case reflect.Slice, reflect.Array:
 		*num += uint(t.Size())
-		//fmt.Printf("kind: %v  size: %v sum-size: %d\n", t.Kind(), t.Size(), *num)
 		for i := 0; i < v.Len(); i++ {
 			item := v.Index(i)
-			if int(item.Kind()) > 16 && item.Kind() != reflect.String && reflect.Value.IsNil(item) {
+			if CheckNil(item.Kind()) && reflect.Value.IsNil(item) {
 				continue
 			}
 			measure(item, num)
@@ -60,15 +58,18 @@ func measure(v reflect.Value, num *uint) {
 	case reflect.String:
 		*num += uint(t.Size())
 		*num += uint(len(v.String()))
-		//fmt.Printf("kind: %v  size: %v sum-size: %d\n", t.Kind(), t.Size(), *num)
 	case reflect.Struct:
-		//fmt.Printf("kind: %v  size: %v\n", t.Kind(), t.Size())
 		for i := 0; i < v.NumField(); i++ {
 			measure(v.Field(i), num)
 		}
 	case reflect.UnsafePointer:
 	default:
 		*num += uint(t.Size())
-		//fmt.Printf("kind: %v  size: %v sum-size: %d\n", t.Kind(), t.Size(), *num)
 	}
+}
+
+
+func CheckNil(kind reflect.Kind) bool {
+	return kind == reflect.Chan || kind == reflect.Func || kind == reflect.Map || kind == reflect.Ptr ||
+		kind == reflect.Interface || kind == reflect.Slice
 }
