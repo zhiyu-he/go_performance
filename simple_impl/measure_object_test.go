@@ -9,14 +9,15 @@ type M struct {
 }
 
 type A struct {
-	Id   int64
-	Name string
-	Ptr  *M
-	Sli1 []int64
-	Sli2 []*M
-	Arr3 [3]int
-	M1   map[int]int
-	M2   map[string]*M
+	Id       int64
+	Name     string
+	Ptr      *M
+	NoUsePtr *M
+	Sli1     []int64
+	Sli2     []*M
+	Arr3     [3]int
+	M1       map[int]int
+	M2       map[string]*M
 }
 
 func TestMeasureObject(t *testing.T) {
