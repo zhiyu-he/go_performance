@@ -93,3 +93,11 @@ func (p *ObjectPool) Stats() {
 		}
 	}()
 }
+
+func (p *ObjectPool) Borrow() interface{} {
+	return p.queue.Pop()
+}
+
+func (p *ObjectPool) Return(i interface{}) {
+	p.queue.Push(i)
+}
