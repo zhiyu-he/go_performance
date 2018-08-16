@@ -1,15 +1,16 @@
 package simple_impl
 
-import "container/heap"
+import (
+	"container/heap"
+)
 
 type Dirty struct {
-	ts int64
+	ts   int64
 	item interface{}
-	idx int
+	idx  int
 }
 
 type MinHeap []*Dirty
-
 
 func newMinHeap(cap int) MinHeap {
 	return make(MinHeap, 0, cap)
@@ -32,12 +33,12 @@ func (p MinHeap) Swap(i, j int) {
 func (p *MinHeap) Push(x interface{}) {
 	n := len(*p)
 	c := cap(*p)
-	if n + 1 < c {
+	if n+1 > c {
 		npq := make(MinHeap, n, c*2)
 		copy(npq, *p)
 		*p = npq
 	}
-	*p = (*p)[0:n+1]
+	*p = (*p)[0 : n+1]
 	dirty := x.(*Dirty)
 	dirty.idx = n
 	(*p)[n] = dirty
@@ -71,9 +72,7 @@ func (p *MinHeap) PeekAndShift(max int64) (*Dirty, int64) {
 }
 
 type DelayPool struct {
-	pure chan interface{}
+	pure      chan interface{}
 	dirtyHeap MinHeap
 	cleanFunc func(i interface{})
 }
-
-
