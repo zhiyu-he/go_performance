@@ -7,7 +7,7 @@ import (
 
 /*
 	Q1: uintptr和Pointer的使用场景?
-	A1:
+	A1: uintptr用于处理offset的case. Pointer通常是一个obj的头地址.
 */
 
 var alloc []byte
