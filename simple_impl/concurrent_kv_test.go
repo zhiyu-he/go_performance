@@ -5,6 +5,18 @@ import (
 	"testing"
 )
 
+type Q struct {
+	id int64
+}
+
+func (p *Q) GetKey() int64 {
+	return p.id
+}
+
+func (p *Q) GetValue() interface{} {
+	return p
+}
+
 var kv = NewKV(100, 2)
 
 func TestKV(t *testing.T) {
