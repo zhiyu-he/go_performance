@@ -51,7 +51,7 @@ func (p *KV) Handle() {
 		req := <-p.opChan
 		switch req.op {
 		case EVENT_GET:
-			req.query(p.cache)
+			//req.query(p.cache)
 			req.signal <- struct{}{}
 		case EVENT_SET:
 			for _, val := range req.values {
