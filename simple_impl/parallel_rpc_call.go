@@ -34,6 +34,23 @@ func Future4(f Function) Function {
 	}
 }
 
+
+func Future5(f Function) Function {
+	var result interface{}
+	var err error
+	mutex := sync.Mutex{}
+	mutex.Lock()
+	go func() {
+		defer mutex.Unlock()
+		result, err = f()
+	}()
+	return func() (interface{}, error) {
+		mutex.Lock()
+		mutex.Unlock()
+		return result, err
+	}
+}
+
 func Future(f Function) Function {
 	var result interface{}
 	var err error
@@ -58,8 +75,8 @@ func Future2(f Function) Function {
 		sig = make(c, 1)
 	}
 	go func() {
-		sig<-struct{}{}
 		result, err = f()
+		sig<-struct{}{}
 	}()
 	return func() (interface{}, error) {
 		<-sig

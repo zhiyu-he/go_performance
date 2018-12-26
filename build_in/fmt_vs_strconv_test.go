@@ -8,19 +8,19 @@ import (
 )
 
 func fmtInt() string {
-	return fmt.Sprint(100)
+	return fmt.Sprint(1000000)
 }
 
 func strconvInt() string {
-	return strconv.FormatInt(100, 10)
+	return strconv.FormatInt(1000000, 10)
 }
 
 func fmtJoin() string {
-	return fmt.Sprintf("%s:%d", "after_rank", 100)
+	return fmt.Sprintf("%s:%d:%d:%d", "after_rank", 100, 200, 300)
 }
 
 func strconvJoin() string {
-	return strings.Join([]string{"after_rank", strconv.FormatInt(100, 10)}, ":")
+	return strings.Join([]string{"after_rank", strconv.FormatInt(100, 10), strconv.FormatInt(200, 10), strconv.FormatInt(300, 10), strconv.FormatInt(400, 10)}, ":")
 }
 
 func strconvAdd() string {

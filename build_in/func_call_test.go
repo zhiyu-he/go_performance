@@ -27,21 +27,18 @@ func (p *Ad) Filter2() bool {
 	return true
 }
 
-
 type Operator struct {
-
 }
 
 func (p *Operator) Match() bool {
 	return true
 }
 
-
-const const_size =  25000
+const const_size = 25000
 
 var adsPtr []*Ad
 
-func init () {
+func init() {
 	adsPtr = make([]*Ad, const_size)
 	for i := 0; i < const_size; i++ {
 		adsPtr[i] = &Ad{
@@ -89,5 +86,25 @@ func BenchmarkDoOPT1(b *testing.B) {
 func BenchmarkDoOPT2(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		DoOPT2()
+	}
+}
+
+func Do(a, b, c, d, e int) {
+
+}
+
+func Do2(a int) {
+
+}
+
+func BenchmarkDo(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Do(1, 2, 3, 4, 5)
+	}
+}
+
+func BenchmarkDo2(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		Do2(1)
 	}
 }
