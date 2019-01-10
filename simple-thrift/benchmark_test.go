@@ -8,7 +8,7 @@ import (
 
 func BenchmarkApacheThriftRead(b *testing.B) {
 	req := &echo.EchoReq{
-		SeqID: 1,
+		SeqId: 1,
 		StrDat: "LogID",
 		BinDat: []byte{0x01,0x02, 0x03},
 	}
