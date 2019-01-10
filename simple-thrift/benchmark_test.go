@@ -4,11 +4,16 @@ import (
 	"testing"
 	"github.com/zhiyu-he/go_performance/simple-thrift/echo"
 	apacheThrift "github.com/apache/thrift/lib/go/thrift"
+	"github.com/stretchr/testify/assert"
 )
 
-func BenchmarkApacheThriftRead(b *testing.B) {
-	req := &echo.EchoReq{
-		SeqId: 1,
+var req *echo.EchoReq
+var dat []byte
+var btf *apacheThrift.TBufferedTransportFactory = apacheThrift.NewTBufferedTransportFactory(1024)
+
+func init() {
+	req = &echo.EchoReq{
+		SeqID: 1,
 		StrDat: "LogID",
 		BinDat: []byte{0x01,0x02, 0x03},
 	}
@@ -16,13 +21,44 @@ func BenchmarkApacheThriftRead(b *testing.B) {
 	for i := 0; i < 3000; i++ {
 		req.AdIds = append(req.AdIds, int64(i))
 	}
-	buffer := apacheThrift.NewTMemoryBufferLen(1024)
+
+	trans := apacheThrift.NewTMemoryBuffer()
 	factory := apacheThrift.NewTBinaryProtocolFactoryDefault()
-	p := factory.GetProtocol(buffer)
+	p := factory.GetProtocol(trans)
 	req.Write(p)
-	buf := *buffer.Buffer
-	for i := 0; i < b.N; i++ {
-		req.Read(p)
-		*buffer.Buffer = buf
+	p.Flush()
+	dat = trans.Bytes()
+}
+
+func TestCorrect(t *testing.T) {
+	var r *echo.EchoReq = &echo.EchoReq{}
+	trans := apacheThrift.NewTMemoryBuffer()
+	trans.Write(dat)
+	factory := apacheThrift.NewTBinaryProtocolFactoryDefault()
+	p := factory.GetProtocol(btf.GetTransport(trans))
+	e := r.Read(p)
+	assert.Nil(t, e)
+	assert.EqualValues(t, req, r)
+}
+
+
+func BenchmarkApacheThriftWrite(b *testing.B) {
+	for i := 0; i <= b.N; i++ {
+		trans := apacheThrift.NewTMemoryBuffer()
+		factory := apacheThrift.NewTBinaryProtocolFactoryDefault()
+		p := factory.GetProtocol(btf.GetTransport(trans))
+		req.Write(p)
+		p.Flush()
+	}
+}
+
+func BenchmarkApacheThriftRead(b *testing.B) {
+	var r *echo.EchoReq = &echo.EchoReq{}
+	for i := 0; i <= b.N; i++ {
+		trans := apacheThrift.NewTMemoryBuffer()
+		trans.Write(dat)
+		factory := apacheThrift.NewTBinaryProtocolFactoryDefault()
+		p := factory.GetProtocol(btf.GetTransport(trans))
+		r.Read(p)
 	}
 }
