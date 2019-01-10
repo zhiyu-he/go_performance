@@ -12,6 +12,10 @@ func BenchmarkApacheThriftRead(b *testing.B) {
 		StrDat: "LogID",
 		BinDat: []byte{0x01,0x02, 0x03},
 	}
+	req.AdIds = make([]int64, 0, 3000)
+	for i := 0; i < 3000; i++ {
+		req.AdIds = append(req.AdIds, int64(i))
+	}
 	buffer := apacheThrift.NewTMemoryBufferLen(1024)
 	factory := apacheThrift.NewTBinaryProtocolFactoryDefault()
 	p := factory.GetProtocol(buffer)
