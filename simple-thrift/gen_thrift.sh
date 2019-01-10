@@ -1,5 +1,5 @@
 #!/bin/sh
 
-thrift -out . --gen go:thrift_import=github.com/apache/thrift/lib/go/thrift echo.thrift
+thrift -out . --gen go:thrift_import=github.com/apache/thrift/lib/go/thrift,package_prefix=github.com/zhiyu-he/go_performance/simple-thrift/ echo.thrift
 
 

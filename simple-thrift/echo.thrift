@@ -1,7 +1,4 @@
 
-namespace go demo.echo
-
-
 struct EchoReq {
     1: i32 seq_id;
     2: string str_dat;

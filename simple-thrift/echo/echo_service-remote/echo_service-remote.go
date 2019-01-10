@@ -4,10 +4,10 @@
 package main
 
 import (
-	"demo/echo"
 	"flag"
 	"fmt"
 	"github.com/apache/thrift/lib/go/thrift"
+	"github.com/zhiyu-he/go_performance/simple-thrift/echo"
 	"math"
 	"net"
 	"net/url"
