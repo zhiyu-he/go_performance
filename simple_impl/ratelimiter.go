@@ -1,9 +1,9 @@
 package simple_impl
 
 import (
-	"time"
-	"sync"
 	"fmt"
+	"sync"
+	"time"
 )
 
 // ref: https://google.github.io/guava/releases/19.0/api/docs/index.html?com/google/common/util/concurrent/RateLimiter.html
@@ -14,7 +14,7 @@ type RateLimiter struct {
 
 func (p *RateLimiter) nowMicros() int64 {
 	t := time.Now()
-	return t.UnixNano()/int64(time.Microsecond)
+	return t.UnixNano() / int64(time.Microsecond)
 }
 
 func (p *RateLimiter) canAcquire(nowMicros int64) bool {
@@ -49,7 +49,7 @@ func Create(permitsPerSecond int64) *RateLimiter {
 	}
 	srl := &SmoothRateLimiter{}
 	srl.nextFreeTicketMicros = 0
-	srl.maxPermits = permitsPerSecond
+	srl.maxPermits = permitsPerSecond - 1
 	srl.stableIntervalMicros = int64(time.Second/time.Microsecond) / permitsPerSecond
 	srl.doSetRate(permitsPerSecond, limiter.nowMicros())
 	limiter.s = srl
@@ -77,17 +77,14 @@ func (p *SmoothRateLimiter) doSetRate(permitsPerSecond, nowMicros int64) {
 	p.maxPermits = permitsPerSecond
 }
 
-// todo bug? 当
 func (p *SmoothRateLimiter) reserveEarliestAvailable(requiredPermits, nowMicros int64) {
 	p.resync(nowMicros)
 	storedPermitsToSpend := min(requiredPermits, p.storedPermits)
 	freshPermits := requiredPermits - storedPermitsToSpend
 	waitMicros := p.stableIntervalMicros * freshPermits
-	fmt.Printf("%d %d %d\n", requiredPermits, p.storedPermits, waitMicros)
 	p.storedPermits -= storedPermitsToSpend
 	p.nextFreeTicketMicros += waitMicros
 }
-
 
 func min(a, b int64) int64 {
 	if a > b {
